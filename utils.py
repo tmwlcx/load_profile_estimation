@@ -6,7 +6,22 @@ from scipy.signal import find_peaks
 from pandas.tseries.holiday import USFederalHolidayCalendar as calendar
 import datetime as dt
 
+# need to fix this later...
+import warnings
+warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
+
 def get_peak_frequencies(df:pd.DataFrame, peak_prominence=10**4, show_plot=False):
+    """
+    A function that takes a signal and outputs an array containing the most prominent frequencies observed in that signal.
+
+    Args: 
+        df - a dataframe containing a single column that represents the signal
+        peak_prominence - a threshold value under which all other frequencies are ignored
+        show_plot - boolean of whether to print the prominent frequencies
+
+    Returns: 
+        peak_freqs - a Numpy array of the most prominent frequencies observed over the signal
+    """
     # xt = df.index.ravel()
     yt = df.values.ravel()
     fft_output = fft(yt)
@@ -26,6 +41,17 @@ def get_peak_frequencies(df:pd.DataFrame, peak_prominence=10**4, show_plot=False
     return peak_freqs
 
 def engineer_features(df:pd.DataFrame, peak_freqs:np.array=np.array([])):
+    """
+    Function that takes a timeseries dataframe and an optional peak frequencies array and produces new columns
+    of engineered features for the original dataframe. 
+
+    Args: 
+        df - a dataframe containing a single column that represents the signal
+        peak_freqs - a Numpy array containing the most prominent frequencies observed within the signal
+    
+    Returns: 
+        df - the original dataframe with new features added
+    """
     df = df.copy()
     if type(df.index != np.datetime64):
         # print("shits fucked")
