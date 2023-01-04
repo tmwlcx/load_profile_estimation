@@ -32,6 +32,7 @@ def get_peak_frequencies(df:pd.DataFrame, peak_prominence=10**4, show_plot=False
     peak_freqs =  freqs[peaks]
     peak_power = power[peaks]
     if show_plot == True:
+        plt.figure(figsize=(12,8))
         plt.stem(peak_freqs, peak_power)
         plt.plot(peak_freqs, peak_power, 'ro')
         plt.title("load profile frequency peaks")
